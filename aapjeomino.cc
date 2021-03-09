@@ -12,7 +12,15 @@ AapjeOmino::AapjeOmino ()
 {
   aanBeurt = 1;
   steenGepakt = false;
-
+  //Initialiseren bord
+  for (int i = 0; i < MaxDimensie; i++)
+  {
+    for (int j = 0; j < MaxDimensie; j++)
+    {
+      bord[i][j].first = -1;
+      bord[i][j].second = 0;
+    }
+  }
 }  // default constructor
 
 //*************************************************************************
@@ -72,7 +80,7 @@ bool AapjeOmino::leesIn (const char* invoernaam)
   //Checken de positie van de 0-steen
   input >> pos_i >> pos_j;
 
-  if (pos_i > MaxDimensie || pos_j > MaxDimensie || pos_i < 0 || pos_j < 0)
+  if (pos_i >= MaxDimensie || pos_j >= MaxDimensie || pos_i < 0 || pos_j < 0)
   {
     cout << "De positie van de 0-steen klopt niet!" << endl;
     return false;
@@ -131,30 +139,75 @@ bool AapjeOmino::eindstand ()
 void AapjeOmino::drukAf()
 {
   cout << endl << endl;
-  cout << "Bord: " << endl;
-  for (vector <Steen>::iterator it = stenenOpHetBord.begin(); it != stenenOpHetBord.end(); ++it)
+  int h = 3 * hoogte + 1;
+  int b = 3 * breedte + 1;
+  char printBord[h][b];
+  for (int i = 0; i <  h; i++)
+    for (int j = 0; j < b; j++)
+      printBord[i][j] = ' ';
+  
+  for (int i = 0; i < hoogte; i++)
   {
-    cout << it->getSteenNummer() << ", ";
-  } 
+    for (int j = 0; j < breedte; j++)
+    {
+      if (bord[i][j].first == -1)
+      {
+        if (i == 0)
+          printBord[0][3 * j + 2] = j + '0';
+        if (j == 0 )
+          printBord[3 * i + 2][0] = i + '0';
+        
+        printBord[3 * i + 1][3 * j + 2] = '.';
+        printBord[3 * i + 3][3 * j + 2] = '.';
+        printBord[3 * i + 2][3 * j + 1] = '.';
+        printBord[3 * i + 2][3 * j + 3] = '.';
+      }
+      else
+      {
+        if (i == 0)
+          printBord[0][3 * j + 2] = j + '0';
+        
+        if (j == 0 )
+          printBord[3 * i + 2][0] = i + '0';
+
+        printBord[3 * i + 1][3 * j + 2] = stenenOpHetBord[bord[i][j].first].getNoord() + '0';
+        printBord[3 * i + 3][3 * j + 2] = stenenOpHetBord[bord[i][j].first].getOost() + '0';
+        printBord[3 * i + 2][3 * j + 1] = stenenOpHetBord[bord[i][j].first].getZuid() + '0';
+        printBord[3 * i + 2][3 * j + 3] = stenenOpHetBord[bord[i][j].first].getWest() + '0';
+      }
+    }
+  }
+  for (int i = 0; i < h; i++)
+  {
+    for (int j = 0; j < b; j++)
+    {
+      cout << printBord[i][j] << "  ";
+    }
+    cout << endl;
+  }
   cout << endl;
+
+  //Make it a function
   cout << "Femke: " << endl;
   for (vector <Steen>::iterator it = Femke.begin(); it != Femke.end(); ++it)
   {
-    cout << it->getSteenNummer() << ", ";
+    cout << it->getSteenNummer() << ": " << it->getNoord() << ", " << it->getOost() << ", " 
+         << it->getZuid() << ", " << it->getWest() << endl;  
   }
-  cout << endl;
   cout << "Lieke: " << endl;
   for (vector <Steen>::iterator it = Lieke.begin(); it != Lieke.end(); ++it)
   {
-    cout << it->getSteenNummer() << ", ";
+    cout << it->getSteenNummer() << ": " << it->getNoord() << ", " << it->getOost() << ", " 
+         << it->getZuid() << ", " << it->getWest() << endl;  
   }
-  cout << endl;
   cout << "Pot: " << endl;
   for (vector <Steen>::iterator it = pot.begin(); it != pot.end(); ++it)
   {
-    cout << it->getSteenNummer() << ", ";
+    cout << it->getSteenNummer() << ": " << it->getNoord() << ", " << it->getOost() << ", " 
+         << it->getZuid() << ", " << it->getWest() << endl;  
   }
-
+  string beurt = (aanBeurt == 1) ? "Femke" : "Lieke";
+  cout << "Nu is aan de beurt: " << beurt << endl;
 
   cout << endl << endl;
 }  // drukAf
@@ -162,7 +215,47 @@ void AapjeOmino::drukAf()
 //*************************************************************************
 
 vector<Zet> AapjeOmino::bepaalMogelijkeZetten ()
-{ vector<Zet> zetten;
+{ 
+  vector <Steen> Speler;
+  if (aanBeurt == 1)
+    Speler = Femke;
+  else
+    Speler = Lieke;
+
+
+
+
+  /*for (vector <Steen>::iterator it = Speler.begin(); it != Speler.end(); ++it)
+  {
+    vector <int> spelerSteenRichting = it->getAllDirections();
+    for (int i = 0; i < hoogte; i++)
+    {
+      for (int j = 0; j < breedte; j++)
+      {
+        if (bord[i][j].first != -1)
+        {
+          vector <int> bordSteenRichting = stenenOpHetBord[bord[i][j].first].getAllDirections();
+          for (int t = 0; t < spelerSteenRichting.size(); t++)
+          {
+            int num = spelerSteenRichting[i];
+            for (int s = 0; s < bordSteenRichting.size(); s++)
+            {
+              if (bordSteenRichting[i] == num)
+              {
+                //Check if possible to put in bord
+                //Noord
+                
+              }
+            }
+          }
+        }
+      }
+    
+    }
+  }
+*/
+  
+  vector<Zet> zetten;
 
   // TODO: implementeer deze memberfunctie
 
