@@ -16,7 +16,9 @@ class Steen
     int getOost ();
     int getZuid ();
     int getWest ();
-    vector <int> getAllDirections ();
+    int getRotatie();
+    void roteer();
+    void print ();
 
   private:
     int noord, oost, zuid, west;

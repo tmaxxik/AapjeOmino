@@ -40,11 +40,18 @@ int Steen::getWest ()
     return west;
 }
 
-vector <int> Steen::getAllDirections ()
+
+void Steen::print () 
 {
-    vector <int> directions;
-    directions.push_back(noord);
-    directions.push_back(oost);
-    directions.push_back(zuid);
-    directions.push_back(west);
+    cout << steenNummer << ": " << noord << ", " << oost << ", " 
+         << zuid << ", " << west << endl;  
+}
+
+void Steen::roteer () 
+{
+        int temp = noord;
+        noord = oost;
+        oost = zuid;
+        zuid = west;
+        west = temp;
 }

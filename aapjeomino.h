@@ -4,7 +4,6 @@
 #define AapjeOminoHVar  // ge-include wordt
 
 #include <vector>
-#include <queue>
 #include <fstream>
 #include "zet.h"
 #include "steen.h"
@@ -140,6 +139,19 @@ class AapjeOmino
            int nrStenen0, int nrStenenInHand0, int rij0, int kolom0,
            int minGetal, int maxGetal);
 
+    bool match (Steen steen, int i, int j);
+
+    //Checkt of een een zet daadwerkelijk een buursteen heeft in een naburige locatie
+    //Er moet ook rekening gehouden worden met grensposities
+    bool heeftEenBuur (int i, int j);
+
+
+    //Checkt waar de buurman is vanuit de huidige positie
+    //retourneert een boolean array van 4 groot.
+    //de T/F waarde hangt af van of er een buurman noord, oost, zuid of west is
+    //respectievelijk in die volgorde
+    bool * waarIsBuur (int i, int j);
+
   private:
     //Het bord (steennummer en rotatie)
     pair<int,int> bord[MaxDimensie][MaxDimensie];
@@ -155,7 +167,7 @@ class AapjeOmino
     //Spelers
     vector <Steen> Femke;
     vector <Steen> Lieke;
-    
+     
     //Pot
      vector <Steen> pot; 
  
