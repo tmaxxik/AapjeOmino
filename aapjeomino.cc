@@ -295,7 +295,7 @@ bool AapjeOmino::match (Steen steen, int i, int j)
 
   if (buren[3])
   {
-    int rotatie = bord[i][j - 1].first;
+    int rotatie = bord[i][j - 1].second;
     Steen S = stenenOpHetBord[bord[i][j - 1].first];
     while (rotatie > 0)
     {
