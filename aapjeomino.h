@@ -152,6 +152,11 @@ class AapjeOmino
     //respectievelijk in die volgorde
     bool * waarIsBuur (int i, int j);
 
+    //Geeft een steen terug als je uit recursie gaat
+    void undoZet();
+
+    int boomScore();
+
   private:
     //Het bord (steennummer en rotatie)
     pair<int,int> bord[MaxDimensie][MaxDimensie];
@@ -159,7 +164,8 @@ class AapjeOmino
         // totaal aantal stenen in het spel
         nrStenen, 
         // speler die aan de beurt is (1 - Femke, 2 - Lieke)  
-        aanBeurt;     
+        aanBeurt;  
+    int maxScore = INT_MIN;
     
     //Stenen op het bord?
     vector <Steen> stenenOpHetBord; 
@@ -170,6 +176,8 @@ class AapjeOmino
      
     //Pot
      vector <Steen> pot; 
+
+
  
     //steengepakt deze ronde
     bool steenGepakt;

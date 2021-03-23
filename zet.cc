@@ -13,7 +13,6 @@ Zet::Zet ()
   r = 0;
   rij = 0;
   kolom = 0;
-
 }  // default constructor
 
 Zet::Zet (int num, int rotatie, int pos_i, int pos_j)
@@ -28,15 +27,17 @@ Zet::Zet (int num, int rotatie, int pos_i, int pos_j)
 
 void Zet::setDefaultWaardes ()
 {
-  // TODO: implementeer deze functie
-
+  i = -1;
+  r = 0;
+  rij = -1;
+  kolom = -1;
 }  // setDefaultWaardes
 
 //*************************************************************************
 
 void Zet::setWaardes (int i0, int r0, int rij0, int kolom0)
 {
-  if (i0>=0)
+  if (i0 >= 0)
     i = i0;
   else
   { i = 0;
@@ -49,7 +50,7 @@ void Zet::setWaardes (int i0, int r0, int rij0, int kolom0)
   else
     r = 0;
 
-  if (rij0>=0)
+  if (rij0 >= 0)
     rij = rij0;
   else
   { rij = 0;
@@ -57,7 +58,7 @@ void Zet::setWaardes (int i0, int r0, int rij0, int kolom0)
     cout << "rij0 mag niet negatief zijn, maar is " << rij0 << endl;
   }
 
-  if (kolom0>=0)
+  if (kolom0 >= 0)
     kolom = kolom0;
   else
   { kolom = 0;
@@ -105,6 +106,4 @@ void Zet::drukAf ()
 {
   cout << "(steen " << i << ", rotatie " << r << ", vakje ["
        << rij << "," << kolom << "])" << endl;
-
 }  // drukAf
-

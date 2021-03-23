@@ -17,7 +17,7 @@ class Steen
     int getZuid ();
     int getWest ();
     int getRotatie();
-    void roteer();
+    void roteer(int hoek);
     void print ();
 
   private:

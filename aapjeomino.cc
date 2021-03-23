@@ -165,13 +165,13 @@ void AapjeOmino::drukAf()
       }
       else
       {
-        int rotaties = bord[i][j].second;
-        Steen currentSteen = stenenOpHetBord[bord[i][j].first];
-        while (rotaties > 0)
-        {
-          currentSteen.roteer();
-          rotaties--;
-        }
+        vector <Steen>::iterator it;
+        for (it = stenenOpHetBord.begin(); it != stenenOpHetBord.end(); it++) 
+          if (it->getSteenNummer() == bord[i][j].first)
+            break;
+        Steen currentSteen = *it;
+        currentSteen.roteer(bord[i][j].second);
+        
         printBord[3 * i + 1][3 * j + 2] = currentSteen.getNoord() + '0';
         printBord[3 * i + 2][3 * j + 3] = currentSteen.getOost() + '0';
         printBord[3 * i + 3][3 * j + 2] = currentSteen.getZuid() + '0';
@@ -256,73 +256,48 @@ bool AapjeOmino::match (Steen steen, int i, int j)
   //Als er wel een buur is, kijken of de steen er niet past.
   if (buren[0])
   {
-    int rotatie = bord[i - 1][j].second;
-    Steen S = stenenOpHetBord[bord[i - 1][j].first];
-    while (rotatie > 0)
-    {
-      S.roteer();
-      rotatie--;
-    }
+    vector <Steen>::iterator it;
+    for (it = stenenOpHetBord.begin(); it != stenenOpHetBord.end(); it++) 
+      if (it->getSteenNummer() == bord[i - 1][j].first)
+        break;
+    Steen S = *it;
+    S.roteer(bord[i - 1][j].second);
     if (steen.getNoord() != S.getZuid())
       noordKlopt = false;
   }
-  
   if (buren[1]) 
   {
-    int rotatie = bord[i][j + 1].second;
-    Steen S = stenenOpHetBord[bord[i][j + 1].first];
-    while (rotatie > 0)
-    {
-      S.roteer();
-      rotatie--;
-    }
+    vector <Steen>::iterator it;
+    for (it = stenenOpHetBord.begin(); it != stenenOpHetBord.end(); it++) 
+      if (it->getSteenNummer() == bord[i][j + 1].first)
+        break;
+    Steen S = *it;
+    S.roteer(bord[i][j + 1].second);
     if (steen.getOost() != S.getWest())
       oostKlopt = false;
   }
-
   if (buren[2])
   {
-    int rotatie = bord[i + 1][j].second;
-    Steen S = stenenOpHetBord[bord[i + 1][j].first];
-    while (rotatie > 0)
-    {
-      S.roteer();
-      rotatie--;
-    }
+    vector <Steen>::iterator it;
+    for (it = stenenOpHetBord.begin(); it != stenenOpHetBord.end(); it++) 
+      if (it->getSteenNummer() == bord[i + 1][j].first)
+        break;
+    Steen S = *it;
+    S.roteer(bord[i + 1][j].second);
     if (steen.getZuid() != S.getNoord()) 
       zuidKlopt = false;
   }
-
   if (buren[3])
   {
-    int rotatie = bord[i][j - 1].second;
-    Steen S = stenenOpHetBord[bord[i][j - 1].first];
-    while (rotatie > 0)
-    {
-      S.roteer();
-      rotatie--;
-    }
+    vector <Steen>::iterator it;
+    for (it = stenenOpHetBord.begin(); it != stenenOpHetBord.end(); it++) 
+      if (it->getSteenNummer() == bord[i][j - 1].first)
+        break;
+    Steen S = *it;
+    S.roteer(bord[i][j - 1].second);
     if (steen.getWest() != S.getOost()) 
       westKlopt = false;
   }
-
-
-  /*if (buren[0])
-    if (steen.getNoord() != stenenOpHetBord[bord[i - 1][j].first].getZuid())
-      noordKlopt = false;
-      
-  if (buren[1]) 
-    if (steen.getOost() != stenenOpHetBord[bord[i][j + 1].first].getWest())
-      oostKlopt = false;
-
-  if (buren[2]) 
-    if (steen.getZuid() != stenenOpHetBord[bord[i + 1][j].first].getNoord()) 
-      zuidKlopt = false;
-   
-  if (buren[3]) 
-    if (steen.getWest() != stenenOpHetBord[bord[i][j - 1].first].getOost()) 
-      westKlopt = false;
-  //Als er geen conflict met (mogelijke)buren is*/
   if (noordKlopt && oostKlopt && zuidKlopt && westKlopt) 
     return true;
   return false;
@@ -344,12 +319,11 @@ vector <Zet> AapjeOmino::bepaalMogelijkeZetten ()
       {
         for (vector <Steen>::iterator it = speler.begin(); it != speler.end(); it++) 
         {
-          Steen currentSteen(it->getNoord(), it->getOost(), it->getZuid(), it->getWest(), it->getSteenNummer());
+          Steen currentSteen = *it;
           for (int k = 0; k < 4; k++) 
           {
-            //Eerste keer geen rotatie.
-            if (k > 0)
-              currentSteen.roteer();
+            currentSteen = *it;
+            currentSteen.roteer(k);
             if (match(currentSteen, i, j)) 
             {
               Zet newZet(currentSteen.getSteenNummer(), k, i, j);
@@ -401,8 +375,6 @@ bool AapjeOmino::doeZet (Zet zet)
   vector <Steen> speler;
   speler = (aanBeurt == 1) ? Femke : Lieke;
   vector <Steen>::iterator it;
-
-  cout << zet.getI() << " " << zet.getR() << " " << zet.getRij() << " " << zet.getKolom() << endl;
   
   for (it = speler.begin(); it != speler.end(); ++it) 
     if (it->getSteenNummer() == zet.getI())
@@ -412,13 +384,9 @@ bool AapjeOmino::doeZet (Zet zet)
     return false;
     
   Steen steen = *it;
-  //We need to rotate him before check if past.
-  int rotaties = zet.getR();
-  while (rotaties > 0)
-  {
-    steen.roteer();
-    rotaties--;
-  }
+  //Roteer
+  steen.roteer(zet.getR());
+
   if (zet.getI() > 0 && zet.getI() < nrStenen &&
       zet.getR() >= 0 && zet.getR() <= 3 &&
       bord[zet.getRij()][zet.getKolom()].first == -1 &&
@@ -428,9 +396,13 @@ bool AapjeOmino::doeZet (Zet zet)
         bord[zet.getRij()][zet.getKolom()].first = zet.getI();
         bord[zet.getRij()][zet.getKolom()].second = zet.getR(); 
         stenenOpHetBord.push_back(*it);
-        speler.erase(it);
+        
+        int index = std::distance(speler.begin(), it);
+        if (aanBeurt == 1)
+          Femke.erase(Femke.begin() + index);
+        else
+          Lieke.erase(Lieke.begin() + index);
         wisselSpeler();
-        cout << "De zet is uitgevoerd!" << endl;
         return true;
       }
     return false;
@@ -474,13 +446,81 @@ vector<Zet> AapjeOmino::bepaalGoedeZetten ()
 
 //*************************************************************************
 
-int AapjeOmino::besteScore (Zet &besteZet, long long &aantalStanden)
+void AapjeOmino::undoZet()
 {
-  // TODO: implementeer deze memberfunctie
+  //Als we terug van de eindstand() is er verkeerde speler aan de beurt
+  Steen returnSteen = stenenOpHetBord.back();
+  if (steenGepakt)
+    pot.push_back(returnSteen);
+  else
+  {
+    wisselSpeler();
+    if (aanBeurt == 1)
+      Femke.push_back(returnSteen);
+    else
+      Lieke.push_back(returnSteen);
+  }
+  stenenOpHetBord.pop_back();
 
-  return 0;
+  for (int i = 0; i < hoogte; i++)
+  {
+    for (int j = 0; j < breedte; j++)
+    {
+      if (bord[i][j].first == returnSteen.getSteenNummer())
+      {
+        bord[i][j].first = -1;
+        bord[i][j].second = 0;
+      }
+    }
+  }
+}
 
+//*************************************************************************
+
+
+int AapjeOmino::besteScore (Zet & besteZet, long long & aantalStanden)
+{
+  if (eindstand())
+  {
+    if (aanBeurt == 1)
+      return Lieke.size() - Femke.size();
+    else
+      return Femke.size() - Lieke.size();
+  }
+  else
+  {
+    vector <Zet> goedeZetten = bepaalGoedeZetten();
+
+    //Als geen goede steen, dan pak maar eentje. En probeer nog een keer om een zet te vinden. 
+
+    while (goedeZetten.empty() && !pot.empty())
+    {
+      if (haalSteenUitPot() != -1)
+      {
+        cout << "Hoi Donny, ik heb me uit de pot gehaald!" << endl;
+        goedeZetten = bepaalGoedeZetten();
+      }
+      if (goedeZetten.empty())
+      {
+        wisselSpeler();
+        goedeZetten = bepaalGoedeZetten();
+      }
+    }
+
+    for (vector<Zet>::iterator it = goedeZetten.begin(); it != goedeZetten.end(); ++it)
+    {
+      int current;
+      doeZet(*it);
+      aantalStanden++;
+      current = besteScore(*it, aantalStanden);
+      if (current > maxScore)
+        maxScore = current;
+      undoZet(); 
+    }
+    return maxScore;
+  }
 }  // besteScore
+
 
 //*************************************************************************
 

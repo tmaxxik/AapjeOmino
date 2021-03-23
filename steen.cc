@@ -47,11 +47,15 @@ void Steen::print ()
          << zuid << ", " << west << endl;  
 }
 
-void Steen::roteer () 
+void Steen::roteer (int hoek) 
 {
+    while (hoek > 0)
+    {
         int temp = noord;
         noord = oost;
         oost = zuid;
         zuid = west;
         west = temp;
+        hoek--;
+    }
 }
