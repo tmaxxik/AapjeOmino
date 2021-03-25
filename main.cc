@@ -134,6 +134,8 @@ void doeSpel (AapjeOmino *ao1)
               break;
       case 3: t1 = clock ();
               score = ao1 -> besteScore (besteZet, aantalStanden);
+              //NOG AANPASEN
+              ao1->setMaxScore(INT_MIN);
               t2 = clock ();
               cout << endl;
               cout << "Optimale score = " << score << endl;

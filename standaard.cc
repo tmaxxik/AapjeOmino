@@ -13,8 +13,8 @@ bool integerInBereik (const char *variabele, int waarde,
   if (waarde>=minWaarde && waarde<=maxWaarde)
     return true;
   else
-  { cout << variabele << "=" << waarde << ", maar moet in [" << minWaarde
-         << "," << maxWaarde << "] liggen." << endl;
+  { cout << variabele << " = " << waarde << ", maar moet in [" << minWaarde
+         << ", " << maxWaarde << "] liggen." << endl;
     return false;
   }
 

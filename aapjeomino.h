@@ -17,7 +17,6 @@ class AapjeOmino
     // Default constructor.
     AapjeOmino ();
 
-
     // Lees een spel in vanuit tekstbestand invoernaam.
     // Controleer daarbij
     // * of het bestand wel te openen is,
@@ -138,50 +137,48 @@ class AapjeOmino
     bool genereerRandomSpel (int hoogte0, int breedte0,
            int nrStenen0, int nrStenenInHand0, int rij0, int kolom0,
            int minGetal, int maxGetal);
-
-    bool match (Steen steen, int i, int j);
-
-    //Checkt of een een zet daadwerkelijk een buursteen heeft in een naburige locatie
-    //Er moet ook rekening gehouden worden met grensposities
+    
+    //Checkt of er een steen die op de positie [i,j] geplaatst kan worden een buur (en) heeft
     bool heeftEenBuur (int i, int j);
 
-
-    //Checkt waar de buurman is vanuit de huidige positie
-    //retourneert een boolean array van 4 groot.
-    //de T/F waarde hangt af van of er een buurman noord, oost, zuid of west is
-    //respectievelijk in die volgorde
+    //Retuneert een array met vier velden: mogelijke buren van n/o/z/w respectievelijk 
     bool * waarIsBuur (int i, int j);
+    
+    //Checkt of er een match is tussen steen die op pde ositie [i,j] geplaats kan worden,
+    //en mogelijke buren
+    bool match (Steen steen, int i, int j);
 
-    //Geeft een steen terug als je uit recursie gaat
+    //Maakt een zet die gedaan is ongedaan 
     void undoZet();
+    //Maakt een zet met een steen uit de pot ongedaan 
+    void undoPot();
 
-    int boomScore();
+    //Setter voor maxScore
+    void setMaxScore (int score);
 
   private:
     //Het bord (steennummer en rotatie)
     pair<int,int> bord[MaxDimensie][MaxDimensie];
-    int hoogte, breedte,
-        // totaal aantal stenen in het spel
-        nrStenen, 
-        // speler die aan de beurt is (1 - Femke, 2 - Lieke)  
-        aanBeurt;  
+    // totaal aantal stenen in het spel
+    int hoogte, breedte;
+    //Aantal stenen 
+    int nrStenen;
+    // Speler die aan de beurt is (1 - Femke, 2 - Lieke)  
+    int aanBeurt;
+
+    //Als een steen deze ronde door een speler al gepakt is.
+    bool steenGepakt;  
+    //Minimaal mogelijke waarde voor maxScore (voor de functie bestScore())
+    //LET OP! Wordt RESET in MAIN.CC
     int maxScore = INT_MIN;
     
-    //Stenen op het bord?
+    //Stenen op het bord
     vector <Steen> stenenOpHetBord; 
-
     //Spelers
     vector <Steen> Femke;
     vector <Steen> Lieke;
-     
     //Pot
      vector <Steen> pot; 
-
-
- 
-    //steengepakt deze ronde
-    bool steenGepakt;
-
 };
 
 #endif
