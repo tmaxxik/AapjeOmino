@@ -6,8 +6,9 @@
 class Zet
 { public:
 
-    // Default constructor
+    //Default constructor
     Zet ();
+    //Non-default constructor 
     Zet (int num, int rotatie, int pos_i, int pos_j);
 
     // Geef de vier velden waardes die in combinatie niet voor kunnen

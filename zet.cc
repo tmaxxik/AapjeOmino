@@ -21,7 +21,7 @@ Zet::Zet (int num, int rotatie, int pos_i, int pos_j)
   r = rotatie;
   rij = pos_i;
   kolom = pos_j;
-}
+}  // non-default constructor
 
 //*************************************************************************
 
